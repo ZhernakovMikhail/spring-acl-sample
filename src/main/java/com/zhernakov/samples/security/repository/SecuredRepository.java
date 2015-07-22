@@ -21,11 +21,11 @@ public interface SecuredRepository<T extends SecuredObject> extends Serializable
     T getById(Object... args);
 
     @PreAuthorize("hasPermission(#object.parent, 'WRITE')")
-    void update(@P("object") T object);
+    T update(@P("object") T object);
 
     @PreAuthorize("hasPermission(#object.parent, 'CREATE')")
-    void add(@P("object") T object);
+    T add(@P("object") T object);
 
     @PreAuthorize("hasPermission(#object, 'DELETE')")
-    void delete(@P("object") T object);
+    T delete(@P("object") T object);
 }
