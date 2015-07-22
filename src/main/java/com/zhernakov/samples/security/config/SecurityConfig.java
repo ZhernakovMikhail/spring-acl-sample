@@ -4,6 +4,9 @@ import net.sf.ehcache.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
+import org.springframework.security.acls.AclPermissionEvaluator;
 import org.springframework.security.acls.domain.*;
 import org.springframework.security.acls.jdbc.BasicLookupStrategy;
 import org.springframework.security.acls.jdbc.JdbcMutableAclService;
@@ -12,12 +15,14 @@ import org.springframework.security.acls.model.AclCache;
 import org.springframework.security.acls.model.AclService;
 import org.springframework.security.acls.model.PermissionGrantingStrategy;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 
 import javax.sql.DataSource;
 
@@ -25,7 +30,8 @@ import javax.sql.DataSource;
  * Created by Misha on 21.07.2015.
  */
 @EnableWebSecurity
-@Import({CachingConfig.class, CustomPermissionEvaluatorConfig.class})
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+@Import({CachingConfig.class})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -57,6 +63,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         jdbcDao.setEnableAuthorities(true);
         jdbcDao.setEnableGroups(true);
         return jdbcDao;
+    }
+
+    @Bean
+    public MethodSecurityExpressionHandler methodSecurityExpressionHandler() {
+        final DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
+        expressionHandler.setPermissionEvaluator(aclPermissionEvaluator());
+        return expressionHandler;
+    }
+
+    @Bean
+    public AclPermissionEvaluator aclPermissionEvaluator() {
+        final AclPermissionEvaluator aclPermissionEvaluator = new AclPermissionEvaluator(aclService());
+        return aclPermissionEvaluator;
+    }
+
+    @Bean
+    public DefaultWebSecurityExpressionHandler webSecurityExpressionHandler() {
+        final DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
+        handler.setPermissionEvaluator(aclPermissionEvaluator());
+        return handler;
     }
 
     @Bean
