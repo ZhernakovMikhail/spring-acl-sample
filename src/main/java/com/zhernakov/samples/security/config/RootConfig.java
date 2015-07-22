@@ -12,7 +12,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 @ComponentScan("com.zhernakov")
 @Import({DBConfig.class, SecurityConfig.class})
 @EnableWebMvc
-@EnableAspectJAutoProxy(proxyTargetClass = true)
+@EnableAspectJAutoProxy(proxyTargetClass = false)
 public class RootConfig {
     @Bean
     public UrlBasedViewResolver setupViewResolver() {
