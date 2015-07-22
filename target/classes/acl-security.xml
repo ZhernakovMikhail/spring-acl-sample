@@ -1,85 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:security="http://www.springframework.org/schema/security"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-      http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
-   http://www.springframework.org/schema/security
-   http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+      http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
 
-    <!-- Включаем защиту выполенения методов и обработку SpEL выражений -->
-    <security:global-method-security pre-post-annotations="enabled">
-        <!-- Enables custom expression handler -->
-        <security:expression-handler ref="expressionHandler"/>
-    </security:global-method-security>
-
-    <!-- See 15.3.2 Built-In Expression @http://static.springsource.org/spring-security/site/docs/3.0.x/reference/el-access.html#el-permission-evaluator -->
-    <bean id="expressionHandler"
-          class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler">
-        <!-- To use hasPermission() in expressions, configure a PermissionEvaluator -->
-        <property name="permissionEvaluator" ref="permissionEvaluator"/>
-    </bean>
-
-    <!-- Declare a custom PermissionEvaluator
-     We'll rely on the standard AclPermissionEvaluator implementation -->
-    <bean class="org.springframework.security.acls.AclPermissionEvaluator" id="permissionEvaluator">
-        <constructor-arg ref="aclService"/>
-    </bean>
-
-    <!-- Активируем возможность использования hasPermission(#var,'TYPE') в JSP теге «sec» -->
-    <bean id="webExpressionHandler"
-          class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler">
-        <property name="permissionEvaluator" ref="permissionEvaluator"/>
-    </bean>
-
-    <!-- Declare an acl service -->
-    <bean class="org.springframework.security.acls.jdbc.JdbcMutableAclService" id="aclService">
-        <constructor-arg ref="dataSource"/>
-        <constructor-arg ref="lookupStrategy"/>
-        <constructor-arg ref="aclCache"/>
-    </bean>
-
-    <!-- Declare a lookup strategy-->
-    <bean id="lookupStrategy" class="org.springframework.security.acls.jdbc.BasicLookupStrategy">
-        <constructor-arg ref="dataSource"/>
-        <constructor-arg ref="aclCache"/>
-        <constructor-arg ref="aclAuthorizationStrategy"/>
-        <constructor-arg ref="auditLogger"/>
-    </bean>
-
-
-    <!-- Declare an acl cache-->
-    <bean id="aclCache" class="org.springframework.security.acls.domain.EhCacheBasedAclCache">
-        <constructor-arg>
-            <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-                <property name="cacheManager">
-                    <bean class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
-                </property>
-                <property name="cacheName" value="aclCache"/>
-            </bean>
-        </constructor-arg>
-        <constructor-arg ref="permissionGrantingStrategy"/>
-        <constructor-arg ref="aclAuthorizationStrategy"/>
-    </bean>
-
-    <!-- Declare an acl authorization strategy-->
-    <bean id="aclAuthorizationStrategy" class="org.springframework.security.acls.domain.AclAuthorizationStrategyImpl">
-        <constructor-arg>
-            <list>
-                <bean class="org.springframework.security.core.authority.SimpleGrantedAuthority">
-                    <constructor-arg value="ROLE_ADMIN"/>
-                </bean>
-            </list>
-        </constructor-arg>
-    </bean>
-
-    <!-- Declare an acl permissionGrantingStrategy strategy-->
-    <bean id="permissionGrantingStrategy"
-          class=" com.zhernakov.samples.security.service.CustomPermissionGrantingStrategy">
-        <constructor-arg ref="auditLogger"/>
-    </bean>
-
-    <!-- Declare an audit logger-->
-    <bean id="auditLogger" class="org.springframework.security.acls.domain.ConsoleAuditLogger"/>
-
+    <!--&lt;!&ndash; Включаем защиту выполенения методов и обработку SpEL выражений &ndash;&gt;-->
+    <!--<security:global-method-security pre-post-annotations="enabled">-->
+    <!--&lt;!&ndash; Enables custom expression handler &ndash;&gt;-->
+    <!--<security:expression-handler ref="expressionHandler"/>-->
+    <!--</security:global-method-security>-->
 </beans>

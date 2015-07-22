@@ -14,18 +14,18 @@ import java.util.Collection;
  */
 public interface SecuredRepository<T extends SecuredObject> extends Serializable {
 
-    @PostFilter("hasPermission(filterObject, 'READ')")
+    @PostFilter("hasAuthority('ADMIN') or hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'WRITE') or hasPermission(filterObject, 'ADMINISTRATION')")
     Collection<T> getAll(Object... args);
 
-    @PostAuthorize("hasPermission(returnObject, 'READ')")
+    @PostAuthorize("hasAuthority('ADMIN') or hasPermission(returnObject, 'READ') or hasPermission(returnObject, 'WRITE') or hasPermission(returnObject, 'ADMINISTRATION')")
     T getById(Object... args);
 
-    @PreAuthorize("hasPermission(#object.parent, 'WRITE')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasPermission(#object.parent, 'WRITE') or hasPermission(#object.parent, 'ADMINISTRATION')")
     T update(@P("object") T object);
 
-    @PreAuthorize("hasPermission(#object.parent, 'CREATE')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasPermission(#object.parent, 'CREATE') or hasPermission(#object.parent, 'ADMINISTRATION')")
     T add(@P("object") T object);
 
-    @PreAuthorize("hasPermission(#object, 'DELETE')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasPermission(#object, 'DELETE') or hasPermission(#object.parent, 'ADMINISTRATION')")
     T delete(@P("object") T object);
 }

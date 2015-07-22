@@ -24,6 +24,7 @@ public class DictElemController {
 
     @RequestMapping(value = "/{dictId}", method = RequestMethod.GET)
     public String getElements(@PathVariable("dictId") long dictId, Model model) {
+        model.addAttribute("dict", DictElem.PARENT_ELEM);
         model.addAttribute("elements", dictElemService.getAll(dictId));
         return "index";
     }

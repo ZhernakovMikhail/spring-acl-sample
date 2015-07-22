@@ -10,6 +10,7 @@
     <!-- Loads ACL related configurations -->
     <import resource="acl-security.xml"/>
 
+
     <!-- This is where we configure Spring-Security  -->
     <security:http auto-config="true" use-expressions="true">
         <security:intercept-url pattern="/**" access="isAuthenticated()"/>
@@ -23,6 +24,8 @@
                 logout-success-url="/login"
                 logout-url="/logout"/>
 
+        <security:remember-me data-source-ref="dataSource"/>
+        <security:expression-handler ref="webExpressionHandler"/>
     </security:http>
 
     <!-- Declare an authentication-manager to use a custom userDetailsService -->

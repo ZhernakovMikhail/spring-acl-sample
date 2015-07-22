@@ -25,7 +25,7 @@
                 logout-url="/logout"/>
 
         <security:remember-me data-source-ref="dataSource"/>
-
+        <security:expression-handler ref="webExpressionHandler"/>
     </security:http>
 
     <!-- Declare an authentication-manager to use a custom userDetailsService -->

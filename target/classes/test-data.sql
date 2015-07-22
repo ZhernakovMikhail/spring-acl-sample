@@ -19,4 +19,4 @@ INSERT INTO acl_object_identity (object_id_class, object_id_identity, parent_obj
 VALUES (100, 1, NULL, 100, 1);
 
 INSERT INTO acl_entry (acl_object_identity, ace_order, sid, mask, granting, audit_success, audit_failure)
-VALUES (100, 100, 100, 16, 1, 1, 1);
+VALUES (100, 100, 101, 4, 1, 1, 1);

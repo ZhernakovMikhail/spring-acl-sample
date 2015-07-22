@@ -2,14 +2,15 @@ com\zhernakov\samples\security\repository\AclServiceUtil.class
 com\zhernakov\samples\security\config\AppInitializer.class
 com\zhernakov\samples\security\repository\AclServiceUtilImpl$2.class
 com\zhernakov\samples\security\repository\DictElemRepositoryImpl$2.class
-com\zhernakov\samples\security\controller\DictElemController.class
 com\zhernakov\samples\security\service\DictElemService.class
+com\zhernakov\samples\security\controller\DictElemController.class
 com\zhernakov\samples\security\repository\DictElemRepositoryImpl$2$1.class
 com\zhernakov\samples\security\repository\SecuredRepository.class
 com\zhernakov\samples\security\model\AbstractEntity.class
 com\zhernakov\samples\security\repository\DictElemRepositoryImpl$1.class
 com\zhernakov\samples\security\repository\DictElemRepositoryImpl.class
-com\zhernakov\samples\security\service\CustomPermissionGrantingStrategy.class
+com\zhernakov\samples\security\config\CustomPermissionEvaluatorConfig.class
+com\zhernakov\samples\security\config\CachingConfig.class
 com\zhernakov\samples\security\model\SecuredObject.class
 com\zhernakov\samples\security\service\DictElemServiceImpl.class
 com\zhernakov\samples\security\aspect\SecurityObjectAddHandler.class

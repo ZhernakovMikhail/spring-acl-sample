@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: Misha
@@ -25,7 +26,10 @@
     </ol>
 </c:if>
 
-<a href="${addUrl}">добавить</a>
+<sec:authorize
+        access="hasAuthority('ADMIN') or hasPermission(#dict, 'CREATE') or hasPermission(#dict, 'ADMINISTRATION')">
+    <a href="${addUrl}">добавить</a>
+</sec:authorize>
 
 </body>
 </html>
