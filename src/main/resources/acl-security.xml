@@ -7,9 +7,8 @@
    http://www.springframework.org/schema/security
    http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
-    <!-- Enables Method Security and Expression-based access control -->
-    <security:global-method-security pre-post-annotations="enabled" mode="aspectj" secured-annotations="enabled"
-                                     jsr250-annotations="disabled">
+    <!-- Включаем защиту выполенения методов и обработку SpEL выражений -->
+    <security:global-method-security pre-post-annotations="enabled">
         <!-- Enables custom expression handler -->
         <security:expression-handler ref="expressionHandler"/>
     </security:global-method-security>
@@ -25,6 +24,12 @@
      We'll rely on the standard AclPermissionEvaluator implementation -->
     <bean class="org.springframework.security.acls.AclPermissionEvaluator" id="permissionEvaluator">
         <constructor-arg ref="aclService"/>
+    </bean>
+
+    <!-- Активируем возможность использования hasPermission(#var,'TYPE') в JSP теге «sec» -->
+    <bean id="webExpressionHandler"
+          class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler">
+        <property name="permissionEvaluator" ref="permissionEvaluator"/>
     </bean>
 
     <!-- Declare an acl service -->
