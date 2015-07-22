@@ -1,17 +1,19 @@
 package com.zhernakov.samples.security.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Misha on 21.07.2015.
  */
 public abstract class AbstractEntity<T extends AbstractEntity> {
 
-    Long id;
+    Serializable id;
 
-    public Long getId() {
+    public Serializable getId() {
         return id;
     }
 
-    public T setId(Long id) {
+    public T setId(Serializable id) {
         this.id = id;
         return (T) this;
     }

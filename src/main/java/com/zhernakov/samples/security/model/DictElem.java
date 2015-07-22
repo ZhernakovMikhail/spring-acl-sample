@@ -1,13 +1,15 @@
 package com.zhernakov.samples.security.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Misha on 21.07.2015.
  */
 public class DictElem extends AbstractEntity<DictElem> implements SecuredObject {
 
-    public static final DictElem PARENT_ELEM = new DictElem(1L, null);
+    public static final DictElem PARENT_ELEM = new DictElem(1, null);
 
-    Long dictId;
+    Serializable dictId;
     SecuredObject parent;
     String name;
 
@@ -16,17 +18,17 @@ public class DictElem extends AbstractEntity<DictElem> implements SecuredObject 
         dictId = PARENT_ELEM.getId();
     }
 
-    public DictElem(Long id, Long dictId) {
+    public DictElem(Serializable id, Serializable dictId) {
         this.id = id;
         this.dictId = dictId;
         this.parent = PARENT_ELEM;
     }
 
-    public Long getDictId() {
+    public Serializable getDictId() {
         return dictId;
     }
 
-    public void setDictId(Long dictId) {
+    public void setDictId(Serializable dictId) {
         this.dictId = dictId;
     }
 
