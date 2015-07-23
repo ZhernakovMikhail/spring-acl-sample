@@ -1,6 +1,7 @@
 package com.zhernakov.samples.security.repository;
 
-import com.zhernakov.samples.security.model.DictElem;
+import com.zhernakov.samples.security.model.Dict;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -16,23 +17,23 @@ import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by Misha on 21.07.2015.
  */
 
-@Repository("dictElemRepository")
+@Repository("dictRepository")
 @Transactional(propagation = Propagation.REQUIRED)
-public class DictElemRepositoryImpl implements SecuredRepository<DictElem> {
+public class DictRepositoryImpl implements SecuredRepository<Dict> {
 
-    final static RowMapper<DictElem> DICT_ELEM_ROW_MAPPER = new RowMapper<DictElem>() {
+    final static RowMapper<Dict> DICT_ROW_MAPPER = new RowMapper<Dict>() {
         @Override
-        public DictElem mapRow(ResultSet rs, int i) throws SQLException {
-            DictElem elem = new DictElem(rs.getLong(1), rs.getLong(2));
-            elem.setName(rs.getString(3));
-            return elem;
+        public Dict mapRow(ResultSet rs, int i) throws SQLException {
+            Dict dict = new Dict(rs.getLong(1));
+            dict.setName(rs.getString(2));
+            return dict;
         }
     };
 
@@ -47,31 +48,28 @@ public class DictElemRepositoryImpl implements SecuredRepository<DictElem> {
     }
 
     @Override
-    public Collection<DictElem> getAll(Object... args) {
-        Assert.notNull(args, "Требуется один параметр dictId");
-        Assert.isTrue(args.length == 1, "Требуется один параметр dictId");
-        long dictId = (long) args[0];
-        final List<DictElem> elements = jdbcTemplate.query("select id, dict_id, name from dict_elem where dict_id = ?", DICT_ELEM_ROW_MAPPER, dictId);
+    public Collection<Dict> getAll(Object... args) {
+        Assert.isTrue(ArrayUtils.isEmpty(args), "Параметры не требуются");
+        final Collection<Dict> elements = jdbcTemplate.query("select id, name from dict", DICT_ROW_MAPPER);
         return elements;
     }
 
     @Override
-    public DictElem getById(Object... args) {
-        Assert.notNull(args, "Требуется два параметра: id и dictId");
-        Assert.isTrue(args.length == 2, "Требуется два параметра: id и dictId");
+    public Dict getById(Object... args) {
+        Assert.notNull(args, "Требуется один параметр id");
+        Assert.isTrue(args.length == 1, "Требуется один параметр id");
         Long id = (Long) args[0];
-        Long dictId = (Long) args[1];
-        return jdbcTemplate.queryForObject("select id, dict_id, name from dict_elem where dict_id = ? and id = ?", DICT_ELEM_ROW_MAPPER, dictId, id);
+        return jdbcTemplate.queryForObject("select id, name from dict where id = ?", DICT_ROW_MAPPER, id);
     }
 
     @Override
-    public DictElem update(final DictElem object) {
-        jdbcTemplate.update("UPDATE dict_elem SET name = ? where dict_id = ? and id = ?", object.getName(), object.getDictId(), object.getId());
+    public Dict update(final Dict object) {
+        jdbcTemplate.update("UPDATE dict SET name = ? where id = ?", object.getName(), object.getId());
         return object;
     }
 
     @Override
-    public DictElem add(final DictElem object) {
+    public Dict add(final Dict object) {
         TransactionTemplate tt = new TransactionTemplate(transactionManager);
         tt.execute(new TransactionCallbackWithoutResult() {
             @Override
@@ -79,9 +77,8 @@ public class DictElemRepositoryImpl implements SecuredRepository<DictElem> {
                 jdbcTemplate.update(new PreparedStatementCreator() {
                     @Override
                     public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                        PreparedStatement ps = con.prepareStatement("INSERT INTO dict_elem (name, dict_id) VALUES (?, ?)");
+                        PreparedStatement ps = con.prepareStatement("INSERT INTO dict (name) VALUES (?)");
                         ps.setObject(1, object.getName(), Types.VARCHAR);
-                        ps.setObject(2, object.getDictId(), Types.NUMERIC);
                         return ps;
                     }
                 });
@@ -92,8 +89,8 @@ public class DictElemRepositoryImpl implements SecuredRepository<DictElem> {
     }
 
     @Override
-    public DictElem delete(final DictElem object) {
-        jdbcTemplate.update("DELETE from dict_elem WHERE dict_id = ? and id = ?", object.getDictId(), object.getId());
+    public Dict delete(final Dict object) {
+        jdbcTemplate.update("DELETE from dict WHERE id = ?", object.getId());
         return object;
     }
 }

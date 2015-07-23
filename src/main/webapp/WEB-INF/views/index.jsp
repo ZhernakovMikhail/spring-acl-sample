@@ -13,23 +13,31 @@
     <title></title>
 </head>
 <body>
+<p>
+    Добро пожаловать, <sec:authentication property="principal.username" />! (<a href="/login?logout">выйти</a>)
+</p>
 
-<c:url var="addUrl" value="/dict/1/0"/>
-
-<c:if test="${not empty elements}">
+<p>Перечень доступных справочников:</p>
+<c:if test="${not empty dicts}">
     <ol>
-        <c:forEach var='elem' items='${elements}'>
+        <c:forEach var='dict' items='${dicts}'>
             <li>
-                <c:out value="${elem.name}"></c:out>
+                <c:url var="viewUrl" value="/dict/${dict.id}"/>
+                <a href="${viewUrl}">${dict.name}</a>
             </li>
         </c:forEach>
     </ol>
 </c:if>
+<c:if test="${empty dicts}">
+    <p>Администратор должен добавить справочник, для того чтобы пользователь смог создавать в нем элементы</p>
+</c:if>
 
-<sec:authorize
-        access="hasAuthority('ADMIN') or hasPermission(#dict, 'CREATE') or hasPermission(#dict, 'ADMINISTRATION')">
-    <a href="${addUrl}">добавить</a>
+
+<sec:authorize access="hasAuthority('ADMIN')">
+    <c:url var="addElemUrl" value="/dict/0"/>
+    <a style="color: green" href="${addElemUrl}">Добавить справочник</a>
 </sec:authorize>
+
 
 </body>
 </html>

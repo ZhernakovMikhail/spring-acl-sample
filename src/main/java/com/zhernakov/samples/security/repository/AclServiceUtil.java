@@ -10,5 +10,5 @@ import org.springframework.security.acls.model.Permission;
 public interface AclServiceUtil {
     boolean addPermissionForCurrentUser(final SecuredObject object, final Permission permission);
 
-    boolean addPermissionForAuthority(final SecuredObject object, final String authority);
+    boolean addPermissionForAuthority(final SecuredObject object, final Permission permission, final String authority);
 }

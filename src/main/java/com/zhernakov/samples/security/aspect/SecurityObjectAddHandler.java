@@ -29,4 +29,9 @@ public class SecurityObjectAddHandler {
     public void addAdminPermissionForCurrentUser(final SecuredObject result) {
         aclServiceUtil.addPermissionForCurrentUser(result, BasePermission.ADMINISTRATION);
     }
+
+    @AfterReturning(pointcut = "addPoint()", returning = "result")
+    public void addCreatePermissionForUsers(final SecuredObject result) {
+        aclServiceUtil.addPermissionForAuthority(result, BasePermission.CREATE, "USER");
+    }
 }

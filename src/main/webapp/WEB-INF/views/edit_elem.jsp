@@ -1,5 +1,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 
 <%--
@@ -15,15 +16,22 @@
     <title></title>
 </head>
 <body>
-<c:url var="addUrl" value="/dict/1/0"/>
-<form:form modelAttribute="elem" method="post" action="${addUrl}">
+<p>
+    Добро пожаловать, <sec:authentication property="principal.username" />! (<a href="/login?logout">выйти</a>)
+</p>
+
+<c:url var="addElemUrl" value="/dict/${elem.dictId}/${elem.id}"/>
+<form:form modelAttribute="elem" method="post" action="${addElemUrl}">
     <form:hidden path="id"/>
     <form:hidden path="dictId"/>
-
     <form:input path="name"/>
 
     <button>Сохранить</button>
 </form:form>
+
+<p>
+    <a href="<c:url value='/dict/${elem.dictId}'/>">к перечню элементов справочника</a>
+</p>
 
 </body>
 </html>

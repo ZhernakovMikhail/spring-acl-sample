@@ -1,6 +1,6 @@
 package com.zhernakov.samples.security.service;
 
-import com.zhernakov.samples.security.model.DictElem;
+import com.zhernakov.samples.security.model.Dict;
 import com.zhernakov.samples.security.repository.SecuredRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,27 +12,27 @@ import java.util.Collection;
 /**
  * Created by Misha on 21.07.2015.
  */
-@Service("dictElemService")
-public class DictElemServiceImpl implements DictElemService<DictElem> {
+@Service("dictService")
+public class DictServiceImpl implements DictService<Dict> {
 
     @Autowired
-    @Qualifier("dictElemRepository")
-    SecuredRepository<DictElem> dictElemRepository;
+    @Qualifier("dictRepository")
+    SecuredRepository<Dict> dictRepository;
 
     @Override
-    public Collection<DictElem> getAll(Long dictId) {
-        return dictElemRepository.getAll(dictId);
+    public Collection<Dict> getAll() {
+        return dictRepository.getAll();
     }
 
     @Override
-    public DictElem getById(Long id, Long dictId) {
-        return dictElemRepository.getById(id, dictId);
+    public Dict getById(Long id) {
+        return dictRepository.getById(id);
     }
 
     @Override
-    public boolean add(DictElem elem) {
+    public boolean add(Dict elem) {
         try {
-            dictElemRepository.add(elem);
+            dictRepository.add(elem);
             return true;
         } catch (AccessDeniedException e) {
             return false;
@@ -40,9 +40,9 @@ public class DictElemServiceImpl implements DictElemService<DictElem> {
     }
 
     @Override
-    public boolean update(DictElem elem) {
+    public boolean update(Dict elem) {
         try {
-            dictElemRepository.update(elem);
+            dictRepository.update(elem);
             return true;
         } catch (AccessDeniedException e) {
             return false;
@@ -50,9 +50,9 @@ public class DictElemServiceImpl implements DictElemService<DictElem> {
     }
 
     @Override
-    public boolean delete(DictElem elem) {
+    public boolean delete(Dict elem) {
         try {
-            dictElemRepository.delete(elem);
+            dictRepository.delete(elem);
             return true;
         } catch (AccessDeniedException e) {
             return false;

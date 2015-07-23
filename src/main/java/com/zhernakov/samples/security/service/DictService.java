@@ -8,11 +8,11 @@ import java.util.Collection;
 /**
  * Created by Misha on 21.07.2015.
  */
-public interface DictElemService<T extends SecuredObject> extends Serializable {
+public interface DictService<T extends SecuredObject> extends Serializable {
 
-    Collection<T> getAll(Long dictId);
+    Collection<T> getAll();
 
-    T getById(Long id, Long dictId);
+    T getById(Long id);
 
     boolean add(T elem);
 

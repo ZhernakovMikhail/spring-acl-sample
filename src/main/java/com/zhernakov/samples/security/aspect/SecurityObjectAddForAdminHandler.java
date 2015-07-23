@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,6 +27,6 @@ public class SecurityObjectAddForAdminHandler {
 
     @AfterReturning(pointcut = "addPoint()", returning = "result")
     public void addAdminPermissionForCurrentUser(final SecuredObject result) {
-        aclServiceUtil.addPermissionForAuthority(result, "ADMIN");
+        aclServiceUtil.addPermissionForAuthority(result, BasePermission.ADMINISTRATION, "ADMIN");
     }
 }

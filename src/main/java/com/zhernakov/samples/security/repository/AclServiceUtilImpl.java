@@ -55,7 +55,7 @@ public class AclServiceUtilImpl implements AclServiceUtil {
     }
 
     @Override
-    public boolean addPermissionForAuthority(final SecuredObject object, final String authority) {
+    public boolean addPermissionForAuthority(final SecuredObject object, final Permission permission, final String authority) {
         TransactionTemplate tt = new TransactionTemplate(transactionManager);
 
         tt.execute(new TransactionCallbackWithoutResult() {
@@ -71,7 +71,7 @@ public class AclServiceUtilImpl implements AclServiceUtil {
                 }
 
                 final GrantedAuthoritySid sid = new GrantedAuthoritySid(authority);
-                acl.insertAce(acl.getEntries().size(), BasePermission.ADMINISTRATION, sid, true);
+                acl.insertAce(acl.getEntries().size(), permission, sid, true);
 
                 aclService.updateAcl(acl);
             }

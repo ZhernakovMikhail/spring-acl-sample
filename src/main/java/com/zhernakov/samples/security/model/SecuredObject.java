@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public interface SecuredObject extends Serializable {
 
-    Serializable getId();
+    Long getId();
 
     SecuredObject getParent();
 }
